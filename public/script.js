@@ -1,9 +1,9 @@
 let board;
 let score;
 let size = 4;
+let gameOver = false;
 
-window.onload = function() {
-    newGame();
+window.onload = function () {
     loadBestScore();
     document.getElementById('new-game-button').addEventListener('click', newGame);
     document.addEventListener('keydown', handleKey);
@@ -23,9 +23,20 @@ function newGame() {
     addRandomTile();
     addRandomTile();
     updateBoardView();
+    gameOver = false;
+
+    document.querySelector('.game-container').classList.remove('game-over');
+    document.querySelector('.game-over-message').classList.remove('show');
+
+    document.querySelector('.game-container').classList.remove('hidden');
+    document.querySelector('.score-container').classList.remove('hidden');
+    document.querySelector('.header').classList.remove('center');
 }
 
+
 function handleKey(e) {
+    if (gameOver) return;
+
     let boardChanged = false;
     if (e.key == 'ArrowRight') {
         boardChanged = moveRight();
@@ -43,6 +54,11 @@ function handleKey(e) {
         updateScore();
         saveScore();
         updateBestScore();
+
+        if (!movesAvailable()) {
+            gameOver = true;
+            endGame();
+        }
     }
 }
 
@@ -210,4 +226,27 @@ function updateBoardView() {
             grid.appendChild(cell);
         }
     }
+}
+
+
+function movesAvailable() {
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            if (board[i][j] === 0) {
+                return true;
+            }
+            if (i > 0 && board[i][j] === board[i - 1][j]) {
+                return true;
+            }
+            if (j > 0 && board[i][j] === board[i][j - 1]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function endGame() {
+    document.querySelector('.game-container').classList.add('game-over');
+    document.querySelector('.game-over-message').classList.add('show');
 }

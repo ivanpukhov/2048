@@ -6,7 +6,7 @@
 }
 
 .title {
-    font-size: 60px;
+    font-size: 48px;
     font-weight: bold;
     color: #776e65;
     margin-bottom: 10px;
@@ -19,7 +19,8 @@
     margin-bottom: 10px;
 }
 
-.score-container, .best-container {
+.score-container,
+.best-container {
     font-size: 28px;
     font-weight: bold;
     color: #776e65;
@@ -124,7 +125,6 @@
     font-weight: bold;
     border-radius: 5px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    transition: background-color 0.2s;
 }
 
 .button:hover {
@@ -139,23 +139,85 @@ body {
     text-align: center;
 }
 
+.hidden {
+    display: none;
+}
+
+.game-container {
+    transition: opacity 0.3s;
+}
+
+.game-container.game-over {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(100%);
+}
+
+.game-over-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    font-size: 24px;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 999;
+}
+
+.game-over-message.show {
+    display: block;
+}
+
 .watermark {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
     pointer-events: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .watermark-text {
-
-    font-size: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
     font-weight: bold;
-    color: rgba(255, 255, 255, 0.87);
+    color: rgba(255, 255, 255, 0.2);
     text-transform: uppercase;
+}
+
+/* Медиа-запрос для мобильных устройств */
+@media (max-width: 600px) {
+    .grid-container {
+        width: 90%;
+        min-height: 300px;
+        height: auto;
+        padding: 5%;
+        gap: 5px;
+    }
+
+    .grid-cell {
+        font-size: 24px;
+    }
+
+    .button {
+        width: 100px;
+        font-size: 16px;
+    }
+}
+
+.center {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
