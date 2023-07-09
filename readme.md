@@ -12,7 +12,7 @@
 2. Склонируйте репозиторий проекта на свой компьютер. Для этого откройте командную строку (терминал) и выполните следующую команду:
 
    ```
-   git clone https://github.com/your-username/game-server.git
+   git clone https://github.com/ivanpukhov/2048.git
    ```
 
   
