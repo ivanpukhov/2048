@@ -2,7 +2,6 @@ let board;
 let score;
 let size = 4;
 let gameOver = false;
-
 window.onload = function () {
     loadBestScore();
     document.getElementById('new-game-button').addEventListener('click', newGame);
@@ -32,7 +31,6 @@ function newGame() {
     document.querySelector('.score-container').classList.remove('hidden');
     document.querySelector('.header').classList.remove('center');
 }
-
 
 function handleKey(e) {
     if (gameOver) return;
@@ -193,7 +191,17 @@ function updateScore() {
 }
 
 function saveScore() {
-    window.localStorage.setItem('2048-score', score);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/highscore', true);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+        }
+    };
+    const data = JSON.stringify({score: score});
+    xhr.send(data);
 }
 
 function loadScore() {
@@ -201,17 +209,31 @@ function loadScore() {
     updateScore();
 }
 
+
 function updateBestScore() {
-    let bestScore = window.localStorage.getItem('2048-best-score') || 0;
-    if (score > bestScore) {
-        window.localStorage.setItem('2048-best-score', score);
-        document.querySelector('.best-container').innerText = "Best: " + score;
-    }
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/highscore', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            const bestScore = response.highscore;
+            document.querySelector('.best-container').innerText = "Best: " + bestScore;
+        }
+    };
+    xhr.send();
 }
 
 function loadBestScore() {
-    let bestScore = window.localStorage.getItem('2048-best-score') || 0;
-    document.querySelector('.best-container').innerText = "Best: " + bestScore;
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/highscore', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            const bestScore = response.highscore;
+            document.querySelector('.best-container').innerText = "Best: " + bestScore;
+        }
+    };
+    xhr.send();
 }
 
 function updateBoardView() {
@@ -227,7 +249,6 @@ function updateBoardView() {
         }
     }
 }
-
 
 function movesAvailable() {
     for (let i = 0; i < size; i++) {

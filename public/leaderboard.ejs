@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Таблица лидеров</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #faf8ef;
+        margin-top: 50px;
+    }
+
+    h1 {
+        color: #776e65;
+    }
+
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        border: 1px solid #bbada0;
+    }
+
+    th, td {
+        padding: 10px 20px;
+        border: 1px solid #bbada0;
+    }
+
+    thead {
+        background-color: #bbada0;
+        color: #ffffff;
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: #eee4da;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #ede0c8;
+    }
+
+    td:first-child {
+        font-weight: bold;
+    }
+
+    a {
+        text-decoration: none;
+        color: #776e65;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+</style>
+<body>
+<h1>Таблица лидеров</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Пользователь</th>
+        <th>Лучший результат</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% users.forEach(function(user) { %>
+    <tr>
+        <td><%= user.username %></td>
+        <td><%= user.highscore %></td>
+    </tr>
+    <% }); %>
+    </tbody>
+</table>
+</body>
+</html>
