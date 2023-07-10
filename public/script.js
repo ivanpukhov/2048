@@ -6,7 +6,40 @@ window.onload = function () {
     loadBestScore();
     document.getElementById('new-game-button').addEventListener('click', newGame);
     document.addEventListener('keydown', handleKey);
+    fetchCoins()
 };
+
+function fetchCoins() {
+    fetch('/coins')
+        .then(response => response.json())
+        .then(data => {
+            const coinsElement = document.getElementById('coins');
+            if (coinsElement) {
+                coinsElement.textContent = data.coins;
+            }
+        })
+        .catch(error => console.error('Ошибка:', error));
+}
+
+// Обновление количества монет пользователя
+function updateCoins(amount) {
+    fetch('/coins', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ amount: amount })
+    })
+        .then(response => response.json())
+        .then(data => {
+            const coinsElement = document.getElementById('coins');
+            if (coinsElement) {
+                coinsElement.textContent = data.coins;
+            }
+        })
+        .catch(error => console.error('Ошибка:', error));
+}
+
 
 function newGame() {
     board = [];
@@ -202,6 +235,8 @@ function saveScore() {
     };
     const data = JSON.stringify({score: score});
     xhr.send(data);
+
+
 }
 
 function loadScore() {
@@ -270,4 +305,8 @@ function movesAvailable() {
 function endGame() {
     document.querySelector('.game-container').classList.add('game-over');
     document.querySelector('.game-over-message').classList.add('show');
+    updateCoins(Math.round(score/50))
+
 }
+
+

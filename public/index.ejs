@@ -45,8 +45,11 @@
 <body>
 <% if (user) { %>
     <h1>Привет, <%= user.username %></h1>
+    <h3>Монеты: <span id="coins"><%= user.coins %></span></h3>
+
     <a href="/logout">Выйти</a>
     <a href="/game" class="play-button">Играть</a>
+
     <a href="/leaderboard" class="play-button-1">Таблица лидеров</a>
 <% } else { %>
     <h1>Вы не авторизованы</h1>

@@ -119,6 +119,37 @@ app.get('/leaderboard', (req, res) => {
     });
 });
 
+// Получение количества монет пользователя
+app.get('/coins', (req, res) => {
+    if (!req.user) return res.sendStatus(401); // 401 Не авторизован
+    res.json({ coins: req.user.coins });
+});
+
+// Обновление количества монет пользователя
+app.post('/coins', (req, res) => {
+    if (!req.user) return res.sendStatus(401); // 401 Не авторизован
+    if (!req.body.amount) return res.sendStatus(400); // 400 Неверный запрос
+
+    User.findOne({ username: req.user.username }, function (err, user) {
+        if (err) {
+            console.log(err);
+            return res.send(err);
+        }
+
+        if (!user) return res.sendStatus(404); // 404 Не найдено
+
+        user.coins += req.body.amount; // Добавление нового количества к монетам пользователя
+        user.save(function (err) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            res.json({ message: 'Монеты обновлены', coins: user.coins });
+        });
+    });
+});
+
+
 
 app.listen(3000, () => {
     console.log('Server started on port 3000');
