@@ -1,13 +1,52 @@
 let board;
 let score;
 let size = 4;
+let lastModalShow = Date.now(); // Добавьте эту строку
 let gameOver = false;
+let isModal = false
 window.onload = function () {
     loadBestScore();
     document.getElementById('new-game-button').addEventListener('click', newGame);
     document.addEventListener('keydown', handleKey);
+    document.getElementById('clear-row-button').addEventListener('click', clearRow);
     fetchCoins()
 };
+
+function getUserCoins() {
+    fetch('/coins', {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            userCoins = data.coins;
+        })
+        .catch(error => console.error('Ошибка:', error));
+}
+
+// Вызов функции getUserCoins для получения текущего количества монет пользователя
+function clearRow() {
+    if (gameOver) return;
+
+    const cost = 50; // Стоимость для очистки ряда
+
+    // Проверяем, достаточно ли у пользователя монет для списания
+    if (userCoins < cost) {
+        alert('Недостаточно монет для выполнения операции');
+        return;
+    }
+
+    // Вычитаем стоимость из общего количества монет пользователя
+    updateCoinsPop(cost);
+
+    // Очищаем верхний ряд (индекс 0)
+    for (let j = 0; j < size; j++) {
+        board[0][j] = 0;
+    }
+
+    updateBoardView();
+
+}
+
 
 function fetchCoins() {
     fetch('/coins')
@@ -28,7 +67,7 @@ function updateCoins(amount) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ amount: amount })
+        body: JSON.stringify({amount: amount})
     })
         .then(response => response.json())
         .then(data => {
@@ -40,6 +79,72 @@ function updateCoins(amount) {
         .catch(error => console.error('Ошибка:', error));
 }
 
+function updateCoinsPop(amount) {
+    fetch('/coins-pop', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({amount: amount})
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Недостаточно монет для списания');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const coinsElement = document.getElementById('coins');
+            if (coinsElement) {
+                coinsElement.textContent = data.coins;
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+            console.error('Ошибка:', error);
+        });
+}
+
+let modal = document.getElementById("modal");
+let btn = document.getElementById("clear-row-button");
+let span = document.getElementsByClassName("close")[0];
+
+function checkEmptyCells() {
+    let emptyCellsCount = 0;
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            if (board[i][j] == 0) {
+                emptyCellsCount++;
+            }
+        }
+    }
+
+    if (emptyCellsCount === 1 && Date.now() - lastModalShow > 30000) {
+        isModal = true;
+        modal.style.display = "block";
+        lastModalShow = Date.now();
+        setTimeout(function () {
+            modal.style.display = "none";
+            isModal = false;
+
+        }, 5000);
+    }
+}
+
+btn.onclick = function () {
+    modal.style.display = "none";
+
+}
+
+span.onclick = function () {
+    modal.style.display = "none";
+}
+
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 function newGame() {
     board = [];
@@ -54,6 +159,8 @@ function newGame() {
     updateScore();
     addRandomTile();
     addRandomTile();
+    getUserCoins();
+
     updateBoardView();
     gameOver = false;
 
@@ -67,6 +174,7 @@ function newGame() {
 
 function handleKey(e) {
     if (gameOver) return;
+    if (isModal) return;
 
     let boardChanged = false;
     if (e.key == 'ArrowRight') {
@@ -105,6 +213,7 @@ function addRandomTile() {
     let randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
     let randomNumber = (Math.random() > 0.5) ? 2 : 4;
     board[randomCell.x][randomCell.y] = randomNumber;
+
 }
 
 function moveRight() {
@@ -221,6 +330,7 @@ function moveDown() {
 
 function updateScore() {
     document.querySelector('.score-container').innerText = "Score: " + score;
+    checkEmptyCells()
 }
 
 function saveScore() {
@@ -305,7 +415,7 @@ function movesAvailable() {
 function endGame() {
     document.querySelector('.game-container').classList.add('game-over');
     document.querySelector('.game-over-message').classList.add('show');
-    updateCoins(Math.round(score/50))
+    updateCoins(Math.round(score / 50))
 
 }
 

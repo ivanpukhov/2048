@@ -68,13 +68,11 @@ app.post('/register', (req, res) => {
 
 app.post('/login', passport.authenticate('local'), (req, res) => {
     res.redirect('/');
-
 });
 
 app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
-
 });
 
 app.get('/highscore', (req, res) => {
@@ -138,6 +136,11 @@ app.post('/coins', (req, res) => {
 
         if (!user) return res.sendStatus(404); // 404 Не найдено
 
+        // Проверяем, является ли значение coins числом
+        if (isNaN(user.coins)) {
+            user.coins = 0;
+        }
+
         user.coins += req.body.amount; // Добавление нового количества к монетам пользователя
         user.save(function (err) {
             if (err) {
@@ -149,8 +152,26 @@ app.post('/coins', (req, res) => {
     });
 });
 
+// Списание количества монет пользователя
+app.post('/coins-pop', (req, res) => {
+    if (!req.user) return res.sendStatus(401); // 401 Не авторизован
+    if (!req.body.amount) return res.sendStatus(400); // 400 Неверный запрос
 
+    User.findOne({ username: req.user.username }, function (err, user) {
+
+
+        user.coins -= req.body.amount; // Списание указанного количества монет пользователя
+        user.save(function (err) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            res.json({ message: 'Монеты списаны', coins: user.coins });
+        });
+    });
+});
 
 app.listen(3000, () => {
     console.log('Server started on port 3000');
 });
+

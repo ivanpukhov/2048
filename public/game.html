@@ -7,6 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>2048</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+
+
+    </style>
 </head>
 <body>
 
@@ -28,8 +32,19 @@
             <button class="button" id="new-game-button">Новая игра</button>
         </div>
     </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="text">
+                У вас мало ходов. Вы можете очистить первый ряд. <br>Цена - 50 монет <br>
+            </div>
+            <button id="clear-row-button">Очистить ряд</button>
+        </div>
+    </div>
 
     <div class="game-container hidden">
+
+
         <div class="grid-container">
             <div class="grid-cell"></div>
             <div class="grid-cell"></div>
@@ -59,6 +74,8 @@
 
 
 </script>
+<script !src="">
 
+</script>
 </body>
 </html>
