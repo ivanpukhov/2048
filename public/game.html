@@ -1,81 +1,34 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>2048</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <style>
-
-
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="watermark">
-    <div class="watermark-text">IVANINBOX</div>
-</div>
-<div class="app-container">
-    <div class="header center">
+<main class="app-container">
+    <header class="header">
         <h1 class="title">2048</h1>
+        <p>Управление — стрелками. Все ходы и очки проверяет сервер.</p>
         <div class="scores-container">
-            <div class="best-container">0</div>
-            <h3>Монеты: <span id="coins">0</span></h3>
-
-            <div class="score-container hidden">0</div>
+            <div class="score-container">Счёт: 0</div>
+            <div class="best-container">Рекорд: 0</div>
+            <div class="coins-container">Монеты: <span id="coins">0</span></div>
         </div>
         <div class="button-container">
-            <a class="home" id="" href="/">Главная</a>
-
-            <button class="button" id="new-game-button">Новая игра</button>
+            <a class="home" href="/">Главная</a>
+            <button class="button" id="new-game-button" type="button">Новая игра</button>
+            <button class="button button-secondary" id="clear-row-button" type="button">Очистить ряд · 50</button>
         </div>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="text">
-                У вас мало ходов. Вы можете очистить первый ряд. <br>Цена - 50 монет <br>
-            </div>
-            <button id="clear-row-button">Очистить ряд</button>
-        </div>
-    </div>
+    </header>
 
-    <div class="game-container hidden">
+    <section class="game-container" aria-label="Игровое поле 2048">
+        <div class="grid-container"></div>
+    </section>
+    <div class="game-over-message" role="status">Ходов больше нет</div>
+</main>
 
-
-        <div class="grid-container">
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-            <div class="grid-cell"></div>
-        </div>
-    </div>
-</div>
-<div class="game-over-message">Game Over</div>
-
-<script src="script.js">
-
-
-</script>
-<script !src="">
-
-</script>
+<script src="script.js"></script>
 </body>
 </html>

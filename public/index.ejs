@@ -1,8 +1,9 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="ru">
 <head>
-    <title>Главная страница</title>
-    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2048 server</title>
     <style>
         body {
             background-color: #faf8ef;
@@ -45,9 +46,10 @@
 <body>
 <% if (user) { %>
     <h1>Привет, <%= user.username %></h1>
+    <% if (demoMode) { %><p>Локальный demo-режим: данные живут до перезапуска сервера.</p><% } %>
     <h3>Монеты: <span id="coins"><%= user.coins %></span></h3>
 
-    <a href="/logout">Выйти</a>
+    <% if (!demoMode) { %><a href="/logout">Выйти</a><% } %>
     <a href="/game" class="play-button">Играть</a>
 
     <a href="/leaderboard" class="play-button-1">Таблица лидеров</a>
